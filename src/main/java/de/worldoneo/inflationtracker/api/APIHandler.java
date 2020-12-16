@@ -35,7 +35,7 @@ public class APIHandler implements HttpHandler {
             List<InflationCalculator.Point> table = inflationCalculator.getInflationPoints(products);
             data = SQLManager.gson.toJson(new APIResponse(table, products)).getBytes();
         } catch (SQLException sqlException) {
-            sqlException.printStackTrace();
+            InflationTracker.logger.error("Failed to calculate Inflation!", sqlException);
         }
     }
 
@@ -44,6 +44,7 @@ public class APIHandler implements HttpHandler {
         InflationTracker.logger.info("API request from {}:{}",
                 exchange.getRemoteAddress().getAddress().toString(),
                 exchange.getRemoteAddress().getPort());
+        exchange.getResponseHeaders().add("Content-Type", "application/json");
         exchange.sendResponseHeaders(200, data.length);
         exchange.getResponseBody().write(data);
         exchange.getResponseBody().flush();

@@ -19,6 +19,11 @@ dependencies {
     shadow 'mysql:mysql-connector-java:8.0.22'
     shadow 'net.hypixel:HypixelAPI:3.0.0'
     shadow 'ch.qos.logback:logback-classic:1.3.0-alpha5'
+
+    compile 'com.zaxxer:HikariCP:3.4.5'
+    compile 'mysql:mysql-connector-java:8.0.22'
+    compile 'net.hypixel:HypixelAPI:3.0.0'
+    compile 'ch.qos.logback:logback-classic:1.3.0-alpha5'
 }
 
 application {

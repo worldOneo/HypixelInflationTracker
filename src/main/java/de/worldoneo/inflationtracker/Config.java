@@ -15,4 +15,5 @@ public class Config {
     public int httpBindPort = 8080;
     public String httpPath = "/data/";
     public long httpAPICrunchPeriod = 60000;
+    public boolean enableGUI = true;
 }
