@@ -43,7 +43,7 @@ public class InflationTracker {
 
         logger.info("Starting DataCollector");
         Timer timer = new Timer();
-        timer.scheduleAtFixedRate(new DataCollector(hypixelAPI, sqlManager), config.hypixelRequestPeriod, config.hypixelRequestPeriod);
+        timer.scheduleAtFixedRate(new DataCollector(hypixelAPI, sqlManager, config), config.hypixelRequestPeriod, config.hypixelRequestPeriod);
         logger.info("Started DataCollector");
 
         if (config.enableHTTPAPI) {
