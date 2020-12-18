@@ -25,7 +25,7 @@ public class Exporter {
         writeTruncateFile(file, data);
     }
 
-    public static void exportJSON(File file,  List<InflationCalculator.Point> results, boolean prettyPrint) throws IOException{
+    public static void exportJSON(File file, List<InflationCalculator.Point> results, boolean prettyPrint) throws IOException {
         byte[] data = exportByteJSON(results, prettyPrint);
         writeTruncateFile(file, data);
     }
@@ -51,7 +51,10 @@ public class Exporter {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("time,value").append(System.lineSeparator());
         for (InflationCalculator.Point point : points) {
-            stringBuilder.append(point.time).append(',').append(point.value).append(System.lineSeparator());
+            stringBuilder.append(point.getTime())
+                    .append(',')
+                    .append(point.getValue())
+                    .append(System.lineSeparator());
         }
         return stringBuilder.toString().getBytes();
     }

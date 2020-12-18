@@ -49,16 +49,19 @@ public class InflationTracker {
             timer.scheduleAtFixedRate(new DataCollector(hypixelAPI, sqlManager, config), config.hypixelRequestPeriod, config.hypixelRequestPeriod);
             logger.info("Started DataCollector");
 
+            APIServer apiServer = null;
             if (config.enableHTTPAPI) {
                 logger.info("Starting HTTP-API at {}:{}", config.httpBindAddress, config.httpBindPort);
                 ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(12);
-                APIServer apiServer = new APIServer(sqlManager, threadPoolExecutor, config);
+                apiServer = new APIServer(sqlManager, threadPoolExecutor, config);
                 apiServer.start();
                 logger.info("Started HTTP-API at {}:{}", config.httpBindAddress, config.httpBindPort);
             }
+            final APIServer finalApiServer = apiServer;
             Runtime.getRuntime().addShutdownHook(new Thread(() -> {
                 logger.info("Shutting down");
                 hypixelAPI.shutdown();
+                if (finalApiServer != null) finalApiServer.stop();
             }));
             logger.info("Start complete!");
 

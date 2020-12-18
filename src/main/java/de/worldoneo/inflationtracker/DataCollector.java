@@ -1,6 +1,8 @@
 package de.worldoneo.inflationtracker;
 
 import de.worldoneo.inflationtracker.sql.SQLManager;
+import lombok.Getter;
+import lombok.Setter;
 import net.hypixel.api.HypixelAPI;
 import net.hypixel.api.reply.skyblock.BazaarReply;
 
@@ -12,7 +14,9 @@ import java.util.concurrent.ExecutionException;
 public class DataCollector extends TimerTask {
     private final HypixelAPI hypixelAPI;
     private final SQLManager sqlManager;
-    private final Config config;
+    @Getter
+    @Setter
+    private Config config;
 
     public DataCollector(HypixelAPI hypixelAPI, SQLManager sqlManager, Config config) {
         this.hypixelAPI = hypixelAPI;

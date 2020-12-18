@@ -3,6 +3,8 @@ package de.worldoneo.inflationtracker.gui;
 import de.worldoneo.inflationtracker.Config;
 import de.worldoneo.inflationtracker.InflationTracker;
 import de.worldoneo.inflationtracker.calculator.InflationCalculator;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +15,14 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class InflationGraph extends JPanel implements ActionListener {
-    private static final long CACHE_TIME = 20000;
+    private static final long CACHE_TIME = 60000;
+    @Setter
+    @Getter
+    private Config config;
+
     private long millis = 0;
     private List<InflationCalculator.Point> pointList;
     private final InflationCalculator inflationCalculator;
-    private final Config config;
     private double pMin = +Double.MAX_VALUE;
     private double pMax = -Double.MAX_VALUE;
 
@@ -25,19 +30,19 @@ public class InflationGraph extends JPanel implements ActionListener {
         this.inflationCalculator = inflationCalculator;
         this.config = config;
 
-        Timer timer = new Timer(3000, this);
+        Timer timer = new Timer(10000, this);
         timer.start();
     }
 
     @Override
     public void paintComponent(Graphics g) {
-        if (millis - CACHE_TIME < 0) {
+        if (System.currentTimeMillis() - millis >= CACHE_TIME) {
             try {
                 pointList = inflationCalculator.getInflationPoints(config.basket);
                 millis = System.currentTimeMillis();
                 for (InflationCalculator.Point point : pointList) {
-                    pMin = Math.min(pMin, point.value);
-                    pMax = Math.max(pMax, point.value);
+                    pMin = Math.min(pMin, point.getValue());
+                    pMax = Math.max(pMax, point.getValue());
                 }
             } catch (SQLException sqlException) {
                 InflationTracker.logger.error("Failed to calculate inflation for GUI", sqlException);
@@ -61,7 +66,7 @@ public class InflationGraph extends JPanel implements ActionListener {
 
 
         double startY = height - ((1 - pMin) / v * height);
-        double xScale = getWidth() / (pointList.get(pointList.size() - 1).time - (double) pointList.get(0).time);
+        double xScale = getWidth() / (pointList.get(pointList.size() - 1).getTime() - (double) pointList.get(0).getTime());
 
         path.moveTo(0, startY);
         average.moveTo(0, startY);
@@ -71,9 +76,9 @@ public class InflationGraph extends JPanel implements ActionListener {
         double totalValue = 0;
         for (InflationCalculator.Point point : pointList) {
             incr++;
-            totalValue += point.value;
-            double x = (point.time - pointList.get(0).time) * xScale;
-            double y = height - ((point.value - pMin) / v * height);
+            totalValue += point.getValue();
+            double x = (point.getTime() - pointList.get(0).getTime()) * xScale;
+            double y = height - ((point.getTime() - pMin) / v * height);
             double avgY = height - (((totalValue / incr) - pMin) / v * height);
             average.lineTo(x, avgY);
             path.lineTo(x, y);
@@ -84,7 +89,7 @@ public class InflationGraph extends JPanel implements ActionListener {
         g2.draw(path);
         g2.setColor(Color.GREEN);
         g2.draw(average);
-        g2.setColor(Color.red);
+        g2.setColor(Color.RED);
         g2.draw(middle);
     }
 

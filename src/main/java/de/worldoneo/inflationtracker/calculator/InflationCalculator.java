@@ -3,6 +3,7 @@ package de.worldoneo.inflationtracker.calculator;
 import de.worldoneo.inflationtracker.Config;
 import de.worldoneo.inflationtracker.sql.SQLEntry;
 import de.worldoneo.inflationtracker.sql.SQLManager;
+import lombok.Data;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -51,9 +52,10 @@ public class InflationCalculator {
         return inflationPoints;
     }
 
+    @Data
     public static class Point {
-        public final long time;
-        public final double value;
+        private final long time;
+        private final double value;
 
         public Point(long time, double value) {
             this.time = time;

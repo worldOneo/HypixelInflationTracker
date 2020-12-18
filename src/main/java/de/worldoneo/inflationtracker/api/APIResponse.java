@@ -1,9 +1,11 @@
 package de.worldoneo.inflationtracker.api;
 
 import de.worldoneo.inflationtracker.calculator.InflationCalculator;
+import lombok.Data;
 
 import java.util.List;
 
+@Data
 public class APIResponse {
     public final List<InflationCalculator.Point> data;
     public final String[] products;

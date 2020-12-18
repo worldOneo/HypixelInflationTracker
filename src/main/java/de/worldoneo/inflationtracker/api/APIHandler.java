@@ -6,6 +6,8 @@ import de.worldoneo.inflationtracker.Config;
 import de.worldoneo.inflationtracker.InflationTracker;
 import de.worldoneo.inflationtracker.calculator.InflationCalculator;
 import de.worldoneo.inflationtracker.sql.SQLManager;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -17,7 +19,9 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 public class APIHandler implements HttpHandler {
-    public final Config config;
+    @Getter
+    @Setter
+    public Config config;
     private byte[] data;
     private final String[] products;
     private InflationCalculator inflationCalculator;
