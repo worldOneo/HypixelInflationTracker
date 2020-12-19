@@ -206,8 +206,7 @@ public class InflationGraph extends JPanel implements ActionListener {
     }
 
     public boolean isSafeZoomAndRL(int zA, int rlPos) {
-        int lTS = pointList.size() - (zoomAmount + rlPosition);
-        System.out.println("lTS: " + lTS + " zA " + zA + " rlPos " + rlPos);
+        int lTS = pointList.size() - (zA + rlPos);
         return lTS - (zA - rlPos) <= lTS && lTS >= 0 && (zA + rlPos) >= 0;
     }
 
